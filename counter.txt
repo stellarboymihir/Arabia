@@ -1,0 +1,61 @@
+Counter
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity count is
+Port ( clk : in STD_LOGIC;
+clk_div: inout std_logic;
+rst : in STD_LOGIC;
+an : out std_logic_vector(3 downto 0);
+seg : out std_logic_vector(6 downto 0);
+q : inout STD_LOGIC_VECTOR (3 downto 0));
+end count;
+architecture Behavioral of count is
+signal count : std_logic_vector( 25 downto 0):= (others => '0');
+begin
+an<="0001";
+process(clk_div,rst)
+variable temp: std_logic_vector(3 downto 0):="0000";
+begin
+if (rst='1') then
+temp:= "0000";
+elsif (clk_div'event and clk_div='1') then
+temp:= temp+'1';
+if( temp > "1001") then
+temp := "0000";
+end if;
+end if;
+q<=temp;
+end process;
+process(clk)
+begin
+if (clk'event and clk='1') then
+count <= count + '1';
+end if;
+clk_div<= count(0);
+end process;
+--clk_div<= count(1);
+process(q)
+begin
+case q is
+when "0000" => seg <= "1000000"; -- 0
+when "0001" => seg <= "1001111"; -- 1
+when "0010" => seg <= "0100100"; -- 2
+when "0011" => seg <= "0110000"; -- 3
+when "0100" => seg <= "0011001"; -- 4
+when "0101" => seg <= "0010010"; -- 5
+when "0110" => seg <= "0000010"; -- 6
+when "0111" => seg <= "1111000"; -- 7
+when "1000" => seg <= "0000000"; -- 8
+when "1001" => seg <= "0010000"; -- 9
+when others => seg <= "1111111";
+end case;
+end process;
+end Behavioral;

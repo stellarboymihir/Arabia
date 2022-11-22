@@ -1,0 +1,64 @@
+Fifo TestBench
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity fifoo_test is
+-- PORT();
+end fifoo_test;
+architecture Behavioral of fifoo_test is
+component fifoo is
+GENERIC
+(
+ADDRESS_WIDTH:integer:=2;
+DATA_WIDTH:integer:=4
+);
+Port ( clk : in STD_LOGIC;
+-- clk_div : inout STD_LOGIC;
+reset : in STD_LOGIC;
+enr : in STD_LOGIC;
+enw : in STD_LOGIC;
+dataout : out STD_LOGIC_VECTOR (3 downto 0);
+datain : in STD_LOGIC_VECTOR (3 downto 0);
+empty : out STD_LOGIC;
+error : out STD_LOGIC;
+full : out STD_LOGIC);
+end component;
+signal clk:STD_LOGIC:='0';
+signal reset:STD_LOGIC;
+signal enr:STD_LOGIC;
+signal enw:STD_LOGIC;
+signal dataout:STD_LOGIC_VECTOR(3 downto 0);
+signal datain:STD_LOGIC_VECTOR(3 downto 0);
+signal empty:STD_LOGIC;
+signal error:STD_LOGIC;
+signal full:STD_LOGIC;
+begin
+U1: fifoo port map(clk,reset,enr,enw,dataout,datain,empty,error,full);
+process
+begin
+clk<='1';
+wait for 20 ns;
+clk<='0';
+wait for 20 ns;
+end process;
+process
+begin
+reset<='1';
+wait for 20 ns;
+reset<='0';
+datain<="1010";
+enw<='1';
+enr<='0';
+wait for 200 ns;
+enw<='0';
+enr<='1';
+wait for 200 ns;
+end process;
+end Behavioral;

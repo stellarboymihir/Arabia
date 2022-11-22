@@ -1,0 +1,28 @@
+Counter TestBench
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity COUNTER_TB is
+-- Port ( );
+end COUNTER_TB;
+architecture Behavioral of COUNTER_TB is
+COMPONENT count is
+Port ( clk : in STD_LOGIC;
+clk_div: inout std_logic;
+rst : in STD_LOGIC;
+q : inout STD_LOGIC_VECTOR (3 downto 0));
+end component;
+signal clk,clk_div: std_logic;
+signal rst:std_logic;
+signal q: std_logic_vector(3 downto 0);
+begin
+u1: count port map(clk,clk_div,rst,q);
+process
+begin
+clk<='1';
+wait for 100 ns;
+clk<='0';
+wait for 100 ns;
+end process;
+rst<='1', '0' after 300 ns ;
+end Behavioral;

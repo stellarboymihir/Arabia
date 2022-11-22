@@ -1,0 +1,47 @@
+SIPO TESTBENCHa
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity sipo_tb is
+--    Port ( clk : in STD_LOGIC;
+--           in2 : in STD_LOGIC;
+--           clk_div : inout STD_LOGIC;
+--           out2 : inout STD_LOGIC);
+--    Port ();    
+end sipo_tb;
+
+architecture Behavioral of sipo_tb is
+component sipo is 
+Port(clk : in std_logic;
+    in2 : in std_logic;
+    clk_div : inout std_logic;
+    out2 : inout std_logic_vector(3 downto 0));
+    end component;
+    signal clk, in2, clk_div : std_logic;
+signal out2 : std_logic_vector(3 downto 0);
+
+begin
+u1 : sipo port map(clk, in2, clk_div, out2);
+
+process 
+begin
+clk <= '0';
+wait for 5 ns;
+
+clk <= '1';
+wait for 5 ns;
+
+end process;
+
+in2 <= '1', '0' after 100 ns, '1' after 200ns;
+end Behavioral;
+    

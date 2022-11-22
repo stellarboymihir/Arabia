@@ -1,0 +1,42 @@
+PIPO
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity pipo is
+Port ( clk : in STD_LOGIC;
+load1 : in STD_LOGIC;
+in4 : in STD_LOGIC_VECTOR (3 downto 0);
+out4 : inout STD_LOGIC_VECTOR (3 downto 0);
+clk_div : inout STD_LOGIC);
+end pipo;
+architecture Behavioral of pipo is
+signal count : std_logic_vector(25 downto 0) := (others=>'0');
+signal s4: std_logic_vector(3 downto 0);
+begin
+process(clk_div, in4, load1, out4)
+begin
+if(load1 = '0') then
+s4 <= in4;
+else
+s4 <= out4;
+end if;
+if(clk_div'EVENT and clk_div = '1') then
+out4 <= s4;
+end if;
+end process;
+process(clk)
+begin
+if(clk'Event and clk='1') then
+count <= count+1;
+end if;
+end process;
+clk_div <= count(1);
+end Behavioral;
+

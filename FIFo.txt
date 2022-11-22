@@ -1,0 +1,86 @@
+Fifo
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity fifoo is
+GENERIC
+(
+ADDRESS_WIDTH:integer:=2;
+DATA_WIDTH:integer:=4
+);
+Port ( clk : in STD_LOGIC;
+-- clk_div : inout STD_LOGIC;
+reset : in STD_LOGIC;
+enr : in STD_LOGIC;
+enw : in STD_LOGIC;
+dataout : out STD_LOGIC_VECTOR (DATA_WIDTH-1 downto 0);
+datain : in STD_LOGIC_VECTOR (DATA_WIDTH-1 downto 0);
+empty : out STD_LOGIC;
+error : out STD_LOGIC;
+full : out STD_LOGIC);
+end fifoo;
+architecture Behavioral of fifoo is
+type memory_type is array(0 to ((2**ADDRESS_WIDTH)-1)) of STD_LOGIC_VECTOR(DATA_WIDTH-1
+downto 0);
+signal memory:memory_type;
+signal readptr,writeptr: STD_LOGIC_VECTOR(ADDRESS_WIDTH-1 downto 0):="00";
+signal full0:STD_LOGIC:='0';
+signal empty0:STD_LOGIC:='1';
+signal counter:STD_LOGIC_VECTOR(30 downto 0):=(others=>'0');
+signal clk_div:STD_LOGIC:='0';
+begin
+full<=full0;
+empty<=empty0;
+fifo0:process(clk_div,reset,datain,enw,enr)
+begin
+if reset='1'then
+readptr<=(others=>'0');
+writeptr<=(others=>'0');
+empty0<='1';
+full0<='0';
+error<='0';
+elsif clk_div'event and clk_div='1' then
+if enw='1' and full0='0' then
+memory (conv_integer(writeptr))<=datain;
+writeptr<=writeptr+'1';
+if(writeptr+'1'=readptr) then
+full0<='1';
+empty0<='0';
+else
+full0<='0';
+empty<='1';
+end if;
+end if;
+end if;
+if enr='1' and empty0='0' then
+dataout<=memory(conv_integer(readptr));
+readptr<=readptr+'1';
+if(readptr+'1'=writeptr) then
+full0<='0';
+empty0<='1';
+else
+full0<='1';
+empty0<='0';
+end if;
+end if;
+if(empty0='1' and enr='1') or (full0='1' and enw='1') then
+error<='1';
+else
+error<='0';
+end if;
+end process;
+process(clk)
+begin
+if(clk'EVENT and clk='1') then
+counter<=counter+1;
+end if;
+end process;
+clk_div<=counter(0);
+end Behavioral;

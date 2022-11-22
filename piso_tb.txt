@@ -1,0 +1,34 @@
+PISO TESTBENCH
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity piso_test is
+-- Port ( );
+end piso_test;
+architecture Behavioral of piso_test is
+component pisoo_1 is
+Port ( clk : in STD_LOGIC;
+load : in STD_LOGIC;
+clk_div : inout STD_LOGIC;
+in3 : in STD_LOGIC_VECTOR (3 downto 0);
+out3 : out STD_LOGIC);
+end component;
+signal clk,load,clk_div,out3:std_logic;
+signal in3:std_logic_vector(3 downto 0);
+begin
+process
+begin
+clk<='0';
+wait for 5 ns;
+clk<='1';
+wait for 5 ns;
+end process;
+process
+begin
+load<='0';
+in3<="1110";
+wait for 200 ns;
+load<='1';
+wait for 200 ns;
+end process;
+u1:pisoo_1 port map(clk,load,clk_div,in3,out3);
+end Behavioral;

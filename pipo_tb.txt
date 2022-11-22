@@ -1,0 +1,34 @@
+PIPO TESTBENCH
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+entity pipo_tb is
+-- Port ( );
+end pipo_tb;
+architecture Behavioral of pipo_tb is
+component pipo1 is+
+port ( clk : in STD_LOGIC;
+clk_slow:inout STD_LOGIC;
+load1 : in STD_LOGIC;
+in4 : in STD_LOGIC_VECTOR (3 downto 0);
+out4 : inout STD_LOGIC_VECTOR(3 downto 0));
+end component;
+signal clk, load1, clk_slow:std_logic;
+signal in4,out4:std_logic_vector(3 downto 0);
+begin
+process
+begin
+clk<='1';
+wait for 5 ns;
+clk<='0';
+wait for 5 ns;
+end process;
+Process
+begin
+load1<='1','0' after 20ns;
+in4<="1010";
+wait for 300 ns;
+end process;
+u1:pipo1 port map(clk,clk_slow,load1,in4,out4);
+end Behavioral;
+
