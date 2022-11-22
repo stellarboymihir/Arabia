@@ -1,0 +1,37 @@
+4 BIT ALU TB
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity alu_tb is
+-- Port ( );
+end alu_tb;
+architecture Behavioral of alu_tb is
+component ALU_4BITT is
+Port ( a : in STD_LOGIC_VECTOR (3 downto 0);
+b : in STD_LOGIC_VECTOR (3 downto 0);
+cin : in STD_LOGIC;
+sel : in STD_LOGIC_VECTOR (3 downto 0);
+y : out STD_LOGIC_VECTOR (3 downto 0));
+end component;
+signal a,b:std_logic_vector(3 downto 0);
+signal sel:std_logic_vector(3 downto 0):="0000";
+signal y:std_logic_vector(3 downto 0);
+signal cin:std_logic;
+begin
+u1 :ALU_4BITT port map (a,b,cin,sel,y);
+a <= "1010";
+b <= "0111";
+cin <= '0' , '1' after 200ns;
+process
+begin
+wait for 200 ns;
+sel<= sel+'1';
+end process;
+end Behavioral;

@@ -1,0 +1,39 @@
+SISO RTL
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity siso is
+Port ( d : in STD_LOGIC;
+q : out STD_LOGIC;
+clk : in STD_LOGIC;
+clk_div: inout STD_LOGIC;
+rst : in STD_LOGIC);
+end siso;
+architecture Behavioral of siso is
+signal internal: std_logic_vector(3 downto 0);
+signal count : std_logic_vector( 25 downto 0):= (others => '0');
+begin
+process(d,clk_div,rst)
+begin
+if (rst='1') then
+internal<="0000";
+elsif (clk_div'event and clk_div='1') then
+internal <= d & internal(internal'left downto 1);
+end if;
+q<= internal(0);
+end process;
+process(clk)
+begin
+if (clk'event and clk='1') then
+count <= count + '1';
+end if;
+end process;
+clk_div<= count(25);
+end Behavioral;

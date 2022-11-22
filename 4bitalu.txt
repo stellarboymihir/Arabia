@@ -1,0 +1,38 @@
+4 BIT ALU RTL
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity ALU_4BITT is
+Port ( a : in STD_LOGIC_VECTOR (3 downto 0);
+b : in STD_LOGIC_VECTOR (3 downto 0);
+cin : in STD_LOGIC;
+sel : in STD_LOGIC_VECTOR (3 downto 0);
+y : out STD_LOGIC_VECTOR (3 downto 0));
+end ALU_4BITT;
+architecture Behavioral of ALU_4BITT is
+begin
+y<= a when sel="0000" ELSE
+a+1 when sel="0001" ELSE
+a-1 when sel="0010" ELSE
+b when sel="0011" ELSE
+b+1 when sel="0100" ELSE
+b-1 when sel="0101" ELSE
+a+b when sel="0110" ELSE
+a+b+cin when sel="0111" ELSE
+NOT a when sel="1000" ELSE
+NOT b when sel="1001" ELSE
+a AND b when sel="1010" ELSE
+a OR b when sel="1011" ELSE
+a NAND b when sel="1100" ELSE
+a NOR b when sel= "1101" ELSE
+a XOR b when sel= "1110" ELSE
+a XNOR b ;
+end Behavioral;
+

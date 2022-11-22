@@ -1,0 +1,34 @@
+SISO TB
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+entity siso_tb is
+-- Port ( );
+end siso_tb;
+architecture Behavioral of siso_tb is
+component siso is
+Port ( d : in STD_LOGIC;
+q : out STD_LOGIC;
+clk : in STD_LOGIC;
+clk_div: inout STD_LOGIC;
+rst : in STD_LOGIC);
+end component ;
+signal d,q,clk,clk_div,rst: STD_LOGIC;
+begin
+u1: siso port map(d,q,clk,clk_div,rst);
+process
+begin
+clk<='0';
+wait for 10 ns;
+clk<='1';
+wait for 10 ns;
+end process;
+rst<='1','0'after 20 ns;
+d<='1','0'after 400 ns;
+end Behavioral;
